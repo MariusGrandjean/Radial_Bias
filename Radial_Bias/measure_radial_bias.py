@@ -31,7 +31,8 @@ import random
 print("Current working directory: {0}".format(os.getcwd()))
 
 # Change the current working directory HERE
-cwd = os.chdir(r'C:\Users\alrouxsi\Documents\Rprojects\2023_iTRAC (Marius)\measure_radial_bias')
+#cwd = os.chdir(r'C:\Users\alrouxsi\Documents\Rprojects\2023_iTRAC (Marius)\measure_radial_bias')
+cwd = os.chdir(r'C:\Users\Marius\Dropbox\Travail\UCLouvain\PhD\Projet\Projet-Saccades\Radial_Bias')
 
 print("Current working directory: {0}".format(os.getcwd()))
 cwd = format(os.getcwd())
@@ -49,12 +50,13 @@ Open dlg box, Store info about the experiment session
 # Get subject's info through a dialog box
 exp_name = 'measure_radialbias'
 exp_info = {
-    'subj_ID': '',
+    'participant': '',
     'session': '',
+    'screendistance(cm)': '60',
     'eccentricity (16° or 20°, default is 16)': 16,
     'gabor patch size (3° or 6°, default is 6)': 6,
     'gabor patch spatial frequency (default is 4cpd)': 4,
-    'practice': 'yes'#whether to do the practice (yes or no). Can be set to "no"
+    'practice': ('yes','no') #whether to do the practice (yes or no). Can be set to "no"
                      #if we just want to check the test loop. When testing participants,
                      #it should be set to "yes"
     }
@@ -66,7 +68,7 @@ if dlg.OK == False: # If 'Cancel' is pressed, quit
 # Get variables from the dial box
 exp_info['date'] = data.getDateStr()
 exp_info['exp_name'] = exp_name
-subj_ID = exp_info['subj_ID']
+participant = exp_info['participant']
 date = exp_info['date']
 eccentricity = exp_info['eccentricity (16° or 20°, default is 16)']
 gaborSizeDVA = exp_info['gabor patch size (3° or 6°, default is 6)']
@@ -121,11 +123,10 @@ stimDuration = 0.150
 nPracticeTrials = 10
 
 # Number of trials that we want for each condition (e.g., condition [VF = left, orientation = horizontal])
-nTrialsPerStaircase = 60 # should probably be at least 50 or 60
+nTrialsPerStaircase = 55 # should probably be at least 50 or 60
 
 # max time (in s) to wait for a response
 timelimit = 3
-
 
 # fixation colors
 neutralColor = (-1, -1, -1)
@@ -304,28 +305,19 @@ textpage = visual.TextStim(win, height=18, alignHoriz='center', wrapWidth=1000)
 
 instructiontexts = {
     1 : """Bienvenue ! Ajustez la position du siège et de la mentonière pour être confortablement assis. \n \n
-            Welcome! Please adjust the position of the seat and chinrest to sit comfortably. \n \n \n 
-            Appuyez sur ESPACE pour continuer \n Press SPACE key to continue.""",
+            Appuyez sur ESPACE pour continuer.""",
     2 : """Cette expérience a pour but d’étudier l'acuité visuelle en vision périphérique, 
             c’est-à-dire la vision sur les côtés du champ visuel. \n \n \n 
-            The aim of this experiment is to study visual acuity in peripheral vision, i.e. 
-            vision to the sides of the visual field \n \n \n 
-            Appuyez sur ESPACE pour continuer \n Press SPACE key to continue.""",
+            Appuyez sur ESPACE pour continuer.""",
     3 : """Pendant l'expérience, il vous est demandé de fixer un point au centre de l'écran, 
             et de ne jamais le lacher du regard. \n
             Un stimulus non identifiable apparaitra brièvement à droite, à gauche, en haut ou en bas de l'écran.
             Votre tâche est simple, vous devez indiquer où le stimulus est apparu en utilisant les 4 flêches du clavier. \n \n \n
-            During the experiment, you are asked to fixate at a point in the center of the screen,
-            and never take your eyes of it. \n
-            An unidentifiable stimulus will briefly appear on the right, left, top or bottom of the screen.
-            Your task is simple: indicate where the stimulus appeared using the 4 arrow keys on the keyboard. \n \n \n
-            Appuyez sur ESPACE pour continuer \n Press SPACE key to continue.""",
+            Appuyez sur ESPACE pour continuer. """,
     4 : """A certains essais, vous verrez bien le stimulus, à d'autres il sera presque invisible. Même si 
             vous ne pouvez pas le voir clairement, faîtes de votre mieux pour deviner où
             le stimulus est apparu. \n \n \n 
-            Sometimes, you will see the stimulus very well. Sometimes, it will be practically invisible.
-            Even if you can't see it clearly, do your best to guess where it appeared. \n \n \n 
-            Appuyez sur ESPACE pour faire un test \n \n Press SPACE key to run a test."""}
+            Appuyez sur ESPACE pour faire un test."""}
 
 for text in instructiontexts:
     instructions = textpage
@@ -447,8 +439,8 @@ if practice == 'yes':
 
         if (practicetrial == nPracticeTrials-1):
             instructions = textpage
-            instructions.text = """Vous êtes maintenant prêt-e à commencer. \n \n You now are ready to start. \n \n 
-                                    Appuyez sur ESPACE pour commencer \n \n Press SPACE key to start."""
+            instructions.text = """ Vous êtes maintenant prêt-e à commencer. \n \n 
+                                    Appuyez sur ESPACE pour commencer."""
             gaussianGray.draw()
             instructions.draw()
             win.flip()
@@ -635,7 +627,7 @@ for thisTrial in range(len(triallist)):
         if (trial%25 == 0):
             # PAUSE
             progression = thisTrial*100/nTrialsTotal
-            pause_txt = 'Take a little break : ) \n progression: You completed ' + str(round(progression,2)) + '%' + ' of the whole experiment \n \n Press SPACE to resume'
+            pause_txt = "Vous pouvez faire une petite pause \n progression: Vous avez terminé" + str(round(progression,2)) + '%' + " de toute l'experience \n \n Appuyez sur ESPACE pour continuer."
             pause.setText(pause_txt)
             gaussianGray.draw()
             pause.draw()
@@ -661,9 +653,9 @@ Save data and pickle some objects for the next session
 
 if not os.path.isdir(datadir):
     os.makedirs(datadir)
-data_fname = exp_name + '_' + exp_info['subj_ID']+ '_session'+ exp_info['session'] + '_' + exp_info['date'] + '.csv'
+data_fname = exp_name + '_' + exp_info['participant']+ '_session'+ exp_info['session'] + '_' + exp_info['date'] + '.csv'
 data_fname = os.path.join(datadir, data_fname)
-subj_ID = exp_info['subj_ID']
+participant = exp_info['participant']
 exp_date = exp_info['date']
 
 
@@ -682,7 +674,7 @@ gaborSF_array = []
 gaborSFDVA_array = []
 
 for n in range(actualNtrials):
-    subject_array.append(subj_ID)
+    subject_array.append(participant)
     exp_name_array.append(exp_name)
     date_array.append(exp_info['date'])
     session_array.append(exp_info['session'])
@@ -695,7 +687,7 @@ for n in range(actualNtrials):
     
     
 
-output_file = pd.DataFrame({'subj_ID': subject_array,
+output_file = pd.DataFrame({'participant': subject_array,
                             'exp_name': exp_name_array,
                             'date': date_array,
                             'session': session_array,
