@@ -32,7 +32,7 @@ print("Current working directory: {0}".format(os.getcwd()))
 
 # Change the current working directory HERE
 #cwd = os.chdir(r'C:\Users\alrouxsi\Documents\Rprojects\2023_iTRAC (Marius)\measure_radial_bias')
-cwd = os.chdir(r'C:\Users\Marius\Dropbox\Travail\UCLouvain\PhD\Projet\Projet-Saccades\Radial_Bias')
+cwd = os.chdir(r'C:\Users\Marius\Dropbox\Travail\UCLouvain\PhD\Projet\Projet-Saccades\Radial_Bias\Radial_bias')
 
 print("Current working directory: {0}".format(os.getcwd()))
 cwd = format(os.getcwd())
@@ -627,7 +627,7 @@ for thisTrial in range(len(triallist)):
         if (trial%25 == 0):
             # PAUSE
             progression = thisTrial*100/nTrialsTotal
-            pause_txt = "Vous pouvez faire une petite pause \n progression: Vous avez terminé" + str(round(progression,2)) + '%' + " de toute l'experience \n \n Appuyez sur ESPACE pour continuer."
+            pause_txt = "Vous pouvez faire une petite pause \n  \nVous avez terminé " + str(round(progression,2)) + '%' + " de l'experience \n \n Appuyez sur ESPACE pour continuer."
             pause.setText(pause_txt)
             gaussianGray.draw()
             pause.draw()
