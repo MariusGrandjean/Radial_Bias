@@ -52,9 +52,9 @@ exp_name = 'measure_radialbias'
 exp_info = {
     'participant': '',
     'session': '',
-    'screendistance(cm)': '60',
-    'eccentricity (16° or 20°, default is 16)': 16,
-    'gabor patch size (3° or 6°, default is 6)': 6,
+    'screendistance(cm)': '90',
+    'eccentricity (15° or 20°, default is 15)': 15,
+    'gabor patch size (3° or 6°, default is 3)': 3,
     'gabor patch spatial frequency (default is 4cpd)': 4,
     'practice': ('yes','no') #whether to do the practice (yes or no). Can be set to "no"
                      #if we just want to check the test loop. When testing participants,
@@ -70,8 +70,8 @@ exp_info['date'] = data.getDateStr()
 exp_info['exp_name'] = exp_name
 participant = exp_info['participant']
 date = exp_info['date']
-eccentricity = exp_info['eccentricity (16° or 20°, default is 16)']
-gaborSizeDVA = exp_info['gabor patch size (3° or 6°, default is 6)']
+eccentricity = exp_info['eccentricity (15° or 20°, default is 15)']
+gaborSizeDVA = exp_info['gabor patch size (3° or 6°, default is 3)']
 gaborSFDVA = exp_info['gabor patch spatial frequency (default is 4cpd)']
 practice = exp_info['practice']
 
@@ -85,12 +85,12 @@ Define / initialize some variables
 '''
 
 # Define parameters of the Gabor patch stimulus (parameters valid for eye-screen distance = 60cm)
-if eccentricity == 16:
+if eccentricity == 15:
     # Where to present the stim (eccentricity)
-    left_xpos = -714
-    right_xpos = 714
-    up_ypos = 714
-    down_ypos = -714
+    left_xpos = -668.5
+    right_xpos = 668.5
+    up_ypos = 668.5
+    down_ypos = -668.5
 elif eccentricity == 20:
     # Where to present the stim (eccentricity)
     left_xpos = -896
@@ -173,6 +173,7 @@ fixation = visual.GratingStim(win, tex=fix, mask='gauss', units='pix', size=20)
 ##################
 bleepf = os.path.join(stimdir + 'blip.wav')
 bleep = sound.Sound(value=bleepf) 
+bleep.setVolume(0.1)
 
 # Pause text
 ############
