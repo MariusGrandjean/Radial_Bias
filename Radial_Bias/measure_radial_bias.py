@@ -240,8 +240,8 @@ Prepare staircases
 
 ndown = 2 # Nb of correct responses before decreasing the contrast
 nup = 1 # Nb of incorrect responses before increasing the contrast
-down_step = 0.01
-up_step = 0.01
+down_step = 0.02
+up_step = 0.02
 maxContrast = 0.2
 
 
@@ -460,7 +460,7 @@ if practice == 'yes':
 
 
 #%%
-TEST LOOP
+"TEST LOOP"
 
 
 # Initialize output arrays
