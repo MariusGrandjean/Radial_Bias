@@ -46,15 +46,15 @@ palette <- c("blue", "mediumseagreen")
 # data ----------------------------------------------------------------------------------------------------------------
 # lit tous les fichiers dans le dossier data et les met dans un dataframe
 df <-
-  list.files(path = "C:/Users/Marius/Dropbox/Travail/UCLouvain/PhD/Projet/Projet-Saccades/Tasks/Radial_Bias/Radial_Bias/data", full.names = TRUE, pattern = "*.csv") %>%
+  list.files(path = "C:/Users/grandjeamari/Documents/Travail/UCLouvain/PhD/Projet/Projet-Saccades/Analysis/Data/Radial bias", full.names = TRUE, pattern = "*.csv") %>%
   map_df(~read_csv(.))
 
-unique(df$subj_ID)
+unique(df$participant)
 
-theSubj = 'CHPA3112' #ici remplace par le nom du sujet dont tu veux ploter les donnees (ce qu'on rentre dans la dialbox psychopy)
+theSubj = 'LASA15' #ici remplace par le nom du sujet dont tu veux ploter les donnees (ce qu'on rentre dans la dialbox psychopy)
 
 df %<>%
-  filter(subj_ID == theSubj) # garde dans df seulement les donnees de theSubj
+  filter(participant == theSubj) # garde dans df seulement les donnees de theSubj
 
 
 
@@ -143,8 +143,7 @@ df %>%
   scale_size(guide = 'none') +
   labs(x = "Contraste", y = "Précision moyenne") +
   customtheme +
-  theme(legend.position = "none",
-        legend.title = element_blank()) #+
+  theme(legend.title = element_blank()) #+
   # ggtitle('Méridien horizontal') 
   
 
@@ -252,44 +251,44 @@ thr.V %>% ggplot(aes(x = VF, y = thre, fill = ori, color = ori)) +
 # 
 # # Plot staircase ------------------------------------------------------------------------------------------------------
 # 
-# # vertical meridian
-# df %>% 
-#   filter(meridian == 'meridianV') %>%  
-#   drop_na(condition) %>% 
-#   ggplot(aes(x = trialCount, y=contrast, color = contrastRule, group=1)) +
-#   geom_point() +
-#   geom_line() +
-#   facet_grid(.~condition) +
-#   customtheme
-# 
-# # horizontal meridian
-# df %>% 
-#   filter(meridian == 'meridianH') %>% 
-#   drop_na(condition) %>% 
-#   ggplot(aes(x = trialCount, y=contrast, color = contrastRule, group=1)) +
-#   geom_point() +
-#   geom_line() +
-#   facet_grid(.~condition) +
-#   customtheme
-# 
+# vertical meridian
+df %>%
+  filter(meridian == 'meridianV') %>%
+  drop_na(condition) %>%
+  ggplot(aes(x = trialCount, y=contrast, color = contrastRule, group=1)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(.~condition) +
+  customtheme
+
+# horizontal meridian
+df %>%
+  filter(meridian == 'meridianH') %>%
+  drop_na(condition) %>%
+  ggplot(aes(x = trialCount, y=contrast, color = contrastRule, group=1)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(.~condition) +
+  customtheme
+#
 # 
 # # plot data / condition -----------------------------------------------------------------------------------------------
 # 
-# # plot data horizontal meridian
-# df %>% 
-#   filter(meridian == "meridianH") %>% 
-#   group_by(eccentricity, VF, ori, contrastbin) %>% 
-#   dplyr::summarise(meanAcc = mean(accuracy),
-#                    n = n()) %>% 
-#   ggplot(aes(x = contrastbin, y = meanAcc, color = ori)) +
-#   geom_point(aes(size = n)) +
-#   geom_line() +
-#   facet_grid(eccentricity~VF) +
-#   customtheme +
-#   ggtitle('horizontal meridian') +
-#   geom_hline(yintercept = 0.25, linetype = "dashed", color = "orange", size = 1) +
-#   ylim(0,1)
-# 
+# plot data horizontal meridian
+df %>%
+  filter(meridian == "meridianH") %>%
+  group_by(eccentricity, VF, ori, contrastbin) %>%
+  dplyr::summarise(meanAcc = mean(accuracy),
+                   n = n()) %>%
+  ggplot(aes(x = contrastbin, y = meanAcc, color = ori)) +
+  geom_point(aes(size = n)) +
+  geom_line() +
+  facet_grid(eccentricity~VF) +
+  customtheme +
+  ggtitle('horizontal meridian') +
+  geom_hline(yintercept = 0.25, linetype = "dashed", color = "orange", size = 1) +
+  ylim(0,1)
+
 # # plot data vertical meridian
 # df %>% 
 #   filter(meridian == "meridianV") %>%   

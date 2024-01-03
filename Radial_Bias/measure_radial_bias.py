@@ -111,6 +111,7 @@ else:
     
 if gaborSFDVA == 4:
     gaborSF = 0.1760 # Size in pixels 
+    # voir formule pour avoir la vraie taille
 else:
     core.quit()
     print('Parameters are only set for a spatial frequency of 4 cpd. Add others to the code if you want to test with another SF')
@@ -141,7 +142,7 @@ thisTrial = 0
 trial = 0 # this is just trial number, to append to data file
     
 # High contrasts levels, for the test phase 
-highContrastLevels = np.around(list(np.arange(0.7,1,0.01)),3)
+highContrastLevels = np.around(list(np.arange(0.5,0.8,0.01)),3)
 highContrastLevels = highContrastLevels.tolist()    
 np.random.shuffle(highContrastLevels)
 
@@ -241,7 +242,7 @@ ndown = 2 # Nb of correct responses before decreasing the contrast
 nup = 1 # Nb of incorrect responses before increasing the contrast
 down_step = 0.01
 up_step = 0.01
-maxContrast = 0.5
+maxContrast = 0.2
 
 
 # initializes some dictionaries used by the staircase() function
@@ -254,12 +255,12 @@ condition_names = ['left_horizontal', 'left_vertical',
                    ]
 
 value = 0
-contrast_dict    = {key:value for key in condition_names}
+contrast_dict    = {key:maxContrast for key in condition_names}
 acc_count_dict   = {key:value for key in condition_names}
 trial_count_dict = {key:value for key in condition_names}
 
 
-#  Define staircase function
+#%%  Define staircase function
 ############################
 
 def staircase(condition):
@@ -273,7 +274,7 @@ def staircase(condition):
 
     # 1st trial: set the initial contrast value as the value defined in maxContrast
     if trial_count_dict[thisCond] == 1: 
-        contrast_dict[thisCond] = contrast_dict[thisCond] + maxContrast
+        contrast_dict[thisCond] = contrast_dict[thisCond]
     
     # From the 2nd trial:
     elif trial_count_dict[thisCond] > 1: 
@@ -458,9 +459,9 @@ if practice == 'yes':
 
 
 
-'''
+#%%
 TEST LOOP
-'''
+
 
 # Initialize output arrays
 
