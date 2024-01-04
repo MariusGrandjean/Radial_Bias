@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Parameters of the OLED SCREEN
-d               = 80                                   % eye-screen distance in cm
+d               = 90                                   % eye-screen distance in cm
 dd              = 2.*d;                                % 2*d
 pixelPitch      = 0.315;                               % pixel size in mm (0.315 for the Alienware OLED)
 ScreenWidthpix  = 3840;                                % screen width in pixels
@@ -25,8 +25,8 @@ alphaH          = 2.*atand(ScreenHeightCm/dd)          % alpha = 2arctan(w/2d) %
 % gabor SF = 4 cpd
 
 
-% Calculate stimulus position in pixels for ECC = 16°
-Eccentricity = 16;
+% Calculate stimulus position in pixels for ECC = 15°
+Eccentricity = 15;
 w = 2*d*tand(Eccentricity./2); %Ecc en cm
 wPix = round(w*ScreenWidthpix/ScreenWidthCm); %Ecc en pix
 
@@ -34,8 +34,6 @@ wPix = round(w*ScreenWidthpix/ScreenWidthCm); %Ecc en pix
 Eccentricity = 20;
 w = 2*d*tand(Eccentricity./2); %Exc en cm
 wPix = round(w*ScreenWidthpix/ScreenWidthCm); %Exc en pix
-
-
 
 
 
@@ -54,9 +52,6 @@ realW           = dd*tand(dvaW./2);                  % gabor width in cm = 2dtan
 realH           = dd*tand(dvaH./2);                  % gabor height in cm = 2dtan(alpha/2)
 realWpix        = round(realW*ScreenWidthpix/ScreenWidthCm) % gabor width in pixels
 realHpix        = round(realH*ScreenWidthpix/ScreenWidthCm) % gabor height in pixels
-
-
-
 
 
 % Calculate the spatial frequency of the Gabor patch in cycles / pixels, for desired Gabor SF = 4 cycles / degrees

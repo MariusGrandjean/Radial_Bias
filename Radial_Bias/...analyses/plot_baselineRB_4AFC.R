@@ -24,7 +24,7 @@ package.check <- lapply(
     }
   }
 )
-
+devtools::install_github("hadley/dplyr@v0.7.0")
 
 # ggplot theme (juste un theme pour que ce soit plus joli)
 customtheme <- theme_bw() +
@@ -51,7 +51,7 @@ df <-
 
 unique(df$participant)
 
-theSubj = 'LASA15' #ici remplace par le nom du sujet dont tu veux ploter les donnees (ce qu'on rentre dans la dialbox psychopy)
+theSubj = 'PIBE29' #ici remplace par le nom du sujet dont tu veux ploter les donnees (ce qu'on rentre dans la dialbox psychopy)
 
 df %<>%
   filter(participant == theSubj) # garde dans df seulement les donnees de theSubj

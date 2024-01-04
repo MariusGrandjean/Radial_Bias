@@ -32,7 +32,7 @@ print("Current working directory: {0}".format(os.getcwd()))
 
 # Change the current working directory HERE
 #cwd = os.chdir(r'C:\Users\alrouxsi\Documents\Rprojects\2023_iTRAC (Marius)\measure_radial_bias')
-cwd = os.chdir(r'C:\Users\Marius\Dropbox\Travail\UCLouvain\PhD\Projet\Projet-Saccades\Radial_Bias\Radial_bias')
+cwd = os.chdir(r'C:/Users/humanvisionlab/Documents/Marius/measure_radial_bias')
 
 print("Current working directory: {0}".format(os.getcwd()))
 cwd = format(os.getcwd())
@@ -54,7 +54,7 @@ exp_info = {
     'session': '',
     'screendistance(cm)': '90',
     'eccentricity (15° or 20°, default is 15)': 15,
-    'gabor patch size (3° or 6°, default is 3)': 3,
+    'gabor patch size (3° or 6°, default is 6)': 6,
     'gabor patch spatial frequency (default is 4cpd)': 4,
     'practice': ('yes','no') #whether to do the practice (yes or no). Can be set to "no"
                      #if we just want to check the test loop. When testing participants,
@@ -71,7 +71,7 @@ exp_info['exp_name'] = exp_name
 participant = exp_info['participant']
 date = exp_info['date']
 eccentricity = exp_info['eccentricity (15° or 20°, default is 15)']
-gaborSizeDVA = exp_info['gabor patch size (3° or 6°, default is 3)']
+gaborSizeDVA = exp_info['gabor patch size (3° or 6°, default is 6)']
 gaborSFDVA = exp_info['gabor patch spatial frequency (default is 4cpd)']
 practice = exp_info['practice']
 
@@ -84,34 +84,33 @@ practice = exp_info['practice']
 Define / initialize some variables 
 '''
 
-# Define parameters of the Gabor patch stimulus (parameters valid for eye-screen distance = 60cm)
+# Define parameters of the Gabor patch stimulus (parameters valid for eye-screen distance = 90cm)
 if eccentricity == 15:
     # Where to present the stim (eccentricity)
-    left_xpos = -668.5
-    right_xpos = 668.5
-    up_ypos = 668.5
-    down_ypos = -668.5
+    left_xpos = -752
+    right_xpos = 752
+    up_ypos = 752
+    down_ypos = -752
 elif eccentricity == 20:
     # Where to present the stim (eccentricity)
-    left_xpos = -896
-    right_xpos = 896
-    up_ypos = 896
-    down_ypos = -896
+    left_xpos = -1008
+    right_xpos = 1008
+    up_ypos = 1008
+    down_ypos = -1008
 else:
     core.quit()
-    print('Choose an eccentricity of either 16 or 20')
+    print('Choose an eccentricity of either 15 or 20')
 
 if gaborSizeDVA == 3:
-    gaborSize = 133 # Size in pixels 
+    gaborSize = 150 # Size in pixels 
 elif gaborSizeDVA == 6:
-    gaborSize = 266 # Size in pixels 
+    gaborSize = 299 # Size in pixels
 else:
     core.quit()
     print('Choose a size for the gabor patch of either 3 or 6')
     
 if gaborSFDVA == 4:
-    gaborSF = 0.1760 # Size in pixels 
-    # voir formule pour avoir la vraie taille
+    gaborSF = 0.1980 # Size in pixels 
 else:
     core.quit()
     print('Parameters are only set for a spatial frequency of 4 cpd. Add others to the code if you want to test with another SF')
@@ -142,12 +141,12 @@ thisTrial = 0
 trial = 0 # this is just trial number, to append to data file
     
 # High contrasts levels, for the test phase 
-highContrastLevels = np.around(list(np.arange(0.5,0.8,0.01)),3)
+highContrastLevels = np.around(list(np.arange(0.7,1,0.01)),3)
 highContrastLevels = highContrastLevels.tolist()    
 np.random.shuffle(highContrastLevels)
 
 # size of the gaussian background
-bgSize = 2933 
+bgSize = 3299
 
 
 #%%#
@@ -173,7 +172,7 @@ fixation = visual.GratingStim(win, tex=fix, mask='gauss', units='pix', size=20)
 # Little Bip sound 
 ##################
 bleepf = os.path.join(stimdir + 'blip.wav')
-bleep = sound.Sound(value=bleepf) 
+bleep = sound.Sound(value=bleepf)
 bleep.setVolume(0.1)
 
 # Pause text
@@ -190,11 +189,11 @@ gaussianGray = visual.ImageStim(win, image = gaussianGrayf,
 # Little gabor patch stimulus
 ##########################
 # Create base object to host the different versions of the gabor stimulus
+#lilGabor = visual.GratingStim(win, units = 'pix',
+                              #sf = gaborSF, mask = 'gauss') 
+
 lilGabor = visual.GratingStim(win, units = 'pix',
-                              #color = (0,0,0), #
-                              sf = gaborSF, mask = 'gauss')
-
-
+                              sf = gaborSF, mask = 'gauss', size = gaborSize) 
 
 
 #%%#
@@ -242,8 +241,7 @@ ndown = 2 # Nb of correct responses before decreasing the contrast
 nup = 1 # Nb of incorrect responses before increasing the contrast
 down_step = 0.02
 up_step = 0.02
-maxContrast = 0.2
-
+maxContrast = 0.25
 
 # initializes some dictionaries used by the staircase() function
 ################################################################
@@ -260,7 +258,7 @@ acc_count_dict   = {key:value for key in condition_names}
 trial_count_dict = {key:value for key in condition_names}
 
 
-#%%  Define staircase function
+#  Define staircase function
 ############################
 
 def staircase(condition):
@@ -303,22 +301,18 @@ win.flip()
 '''
 INSTRUCTIONS AND PRACTICE
 '''
-textpage = visual.TextStim(win, height=18, alignHoriz='center', wrapWidth=1000)
+textpage = visual.TextStim(win, height=30, alignHoriz='center', wrapWidth=1000)
 
 instructiontexts = {
-    1 : """Bienvenue ! Ajustez la position du siège et de la mentonière pour être confortablement assis. \n \n
+    1 : """Bienvenue ! \n \n Ajustez la position du siège et de la mentonière pour être confortablement assis. \n \n
             Appuyez sur ESPACE pour continuer.""",
-    2 : """Cette expérience a pour but d’étudier l'acuité visuelle en vision périphérique, 
-            c’est-à-dire la vision sur les côtés du champ visuel. \n \n \n 
+    2 : """Cette expérience a pour but d’étudier l'acuité visuelle en vision périphérique, c’est-à-dire la vision sur les côtés du champ visuel. \n \n \n 
             Appuyez sur ESPACE pour continuer.""",
-    3 : """Pendant l'expérience, il vous est demandé de fixer un point au centre de l'écran, 
-            et de ne jamais le lacher du regard. \n
-            Un stimulus non identifiable apparaitra brièvement à droite, à gauche, en haut ou en bas de l'écran.
+    3 : """Pendant l'expérience, il vous est demandé de fixer un point au centre de l'écran, et de ne jamais le lacher du regard. \n
+            Un stimulus non identifiable apparaitra brièvement à droite, à gauche, en haut ou en bas de l'écran.\n 
             Votre tâche est simple, vous devez indiquer où le stimulus est apparu en utilisant les 4 flêches du clavier. \n \n \n
             Appuyez sur ESPACE pour continuer. """,
-    4 : """A certains essais, vous verrez bien le stimulus, à d'autres il sera presque invisible. Même si 
-            vous ne pouvez pas le voir clairement, faîtes de votre mieux pour deviner où
-            le stimulus est apparu. \n \n \n 
+    4 : """A certains essais, vous verrez bien le stimulus, à d'autres il sera presque invisible. Même si vous ne pouvez pas le voir clairement, faîtes de votre mieux pour deviner où le stimulus est apparu. \n \n \n 
             Appuyez sur ESPACE pour faire un test."""}
 
 for text in instructiontexts:
@@ -459,9 +453,9 @@ if practice == 'yes':
 
 
 
-#%%
-"TEST LOOP"
-
+'''
+TEST LOOP
+'''
 
 # Initialize output arrays
 
