@@ -22,8 +22,7 @@ import numpy as np
 import pandas as pd
 import os
 import random
-
-
+import math
 
 #%%#  Path stuff
 
@@ -32,7 +31,7 @@ print("Current working directory: {0}".format(os.getcwd()))
 
 # Change the current working directory HERE
 #cwd = os.chdir(r'C:\Users\alrouxsi\Documents\Rprojects\2023_iTRAC (Marius)\measure_radial_bias')
-cwd = os.chdir(r'C:/Users/humanvisionlab/Documents/Marius/measure_radial_bias')
+cwd = os.chdir(r'C:/Users/grandjeamari/Documents/Travail/UCLouvain/PhD/Projet/Projet-Saccades/Tasks/Radial_Bias/Radial_Bias')
 
 print("Current working directory: {0}".format(os.getcwd()))
 cwd = format(os.getcwd())
@@ -52,9 +51,13 @@ exp_name = 'measure_radialbias'
 exp_info = {
     'participant': '',
     'session': '',
-    'screendistance(cm)': '90',
+    'screendistance(cm)': '60',
+    'screenwidth(cm)': '60',
+    'screenresolutionhori(pixels)': '1920', 
+    'screenresolutionvert(pixels)': '1080',
+    'refreshrate(hz)': '59',
     'eccentricity (15° or 20°, default is 15)': 15,
-    'gabor patch size (3° or 6°, default is 6)': 6,
+    'gabor patch size': 6,
     'gabor patch spatial frequency (default is 4cpd)': 4,
     'practice': ('yes','no') #whether to do the practice (yes or no). Can be set to "no"
                      #if we just want to check the test loop. When testing participants,
@@ -71,12 +74,9 @@ exp_info['exp_name'] = exp_name
 participant = exp_info['participant']
 date = exp_info['date']
 eccentricity = exp_info['eccentricity (15° or 20°, default is 15)']
-gaborSizeDVA = exp_info['gabor patch size (3° or 6°, default is 6)']
+gaborSizeDVA = exp_info['gabor patch size']
 gaborSFDVA = exp_info['gabor patch spatial frequency (default is 4cpd)']
 practice = exp_info['practice']
-
-
-
 
 
 #%%#
@@ -101,13 +101,13 @@ else:
     core.quit()
     print('Choose an eccentricity of either 15 or 20')
 
-if gaborSizeDVA == 3:
-    gaborSize = 150 # Size in pixels 
-elif gaborSizeDVA == 6:
-    gaborSize = 299 # Size in pixels
-else:
-    core.quit()
-    print('Choose a size for the gabor patch of either 3 or 6')
+# if gaborSizeDVA == 3:
+#     gaborSize = 150 # Size in pixels 
+# elif gaborSizeDVA == 6:
+#     gaborSize = 299 # Size in pixels
+# else:
+#     core.quit()
+#     print('Choose a size for the gabor patch of either 3 or 6')
     
 if gaborSFDVA == 4:
     gaborSF = 0.1980 # Size in pixels 
@@ -117,13 +117,13 @@ else:
     
 
 # Presentation duration
-stimDuration = 0.150 
-
+#stimDuration = 0.150 
+stimDuration = 1
 # Number of practice trials
 nPracticeTrials = 10
 
 # Number of trials that we want for each condition (e.g., condition [VF = left, orientation = horizontal])
-nTrialsPerStaircase = 55 # should probably be at least 50 or 60
+nTrialsPerStaircase = 65 # should probably be at least 50 or 60
 
 # max time (in s) to wait for a response
 timelimit = 3
@@ -155,8 +155,17 @@ Prepare window object and stimuli
 '''
 # Window object
 ###############
+
 OLED = monitors.Monitor('testMonitor') #this is default 2.2 gamma
-OLED.setSizePix((3840, 2160)) 
+OLED.setWidth(float(exp_info['screenwidth(cm)'])) # Cm width
+OLED.setDistance(float(exp_info['screendistance(cm)']))
+horipix = float(exp_info['screenresolutionhori(pixels)'])
+vertpix = float(exp_info['screenresolutionvert(pixels)'])
+framerate = exp_info['refreshrate(hz)']
+scrsize = (horipix,vertpix)
+framelength = 1000/(float(framerate))
+OLED.setSizePix(scrsize)
+#OLED.setSizePix((1920, 1200)) 
 win = visual.Window(monitor = OLED,
                     color = (-1, -1, -1),
                     units = 'pix',
@@ -164,6 +173,32 @@ win = visual.Window(monitor = OLED,
                     allowGUI = True)
 win.setMouseVisible(False)
 
+# %% Calculation of grating_size
+
+# Constants for the calculation
+d = float(exp_info['screendistance(cm)'])  # eye-screen distance in cm
+dd = 2 * d  # 2*d
+pixelPitch = 0.315  # pixel size in mm (to change depending on your screen)
+screenWidthPix = float(exp_info['screenresolutionhori(pixels)'])  # screen width in pixels
+screenHeightPix = float(exp_info['screenresolutionvert(pixels)']) # screen height in pixels
+
+# Calculate screen width and height in cm
+screenWidthCm = pixelPitch * screenWidthPix / 10  # screen width in cm
+screenHeightCm = pixelPitch * screenHeightPix / 10  # screen height in cm
+
+# Desired angular size (width and height) in degrees
+alphaW = float(exp_info['gabor patch size'])
+alphaH = float(exp_info['gabor patch size'])
+
+# Calculate image width and height in cm for the desired angular size
+real_hori = dd * math.tan(math.radians(alphaW / 2))  # image width in cm = 2dtan(alpha/2)
+real_vert = dd * math.tan(math.radians(alphaH / 2))  # image height in cm = 2dtan(alpha/2)
+
+# Calculate image width and height in pixels for the desired size
+real_hori_pix = round(real_hori * screenWidthPix / screenWidthCm)  # image width in pixels
+real_vert_pix = round(real_vert * screenWidthPix / screenWidthCm)  # image height in pixels
+
+gaborSizeDVA = (real_hori_pix, real_vert_pix)
 # Fixation dot
 ##############
 fix = np.ones((20, 20))*(-1)
@@ -186,16 +221,11 @@ gaussianGray = visual.ImageStim(win, image = gaussianGrayf,
                                 units = 'pix', pos = (0,0), 
                                 size = (bgSize,bgSize))
 
-# Little gabor patch stimulus
-##########################
-# Create base object to host the different versions of the gabor stimulus
 #lilGabor = visual.GratingStim(win, units = 'pix',
-                              #sf = gaborSF, mask = 'gauss') 
+#                              sf = gaborSF, mask = 'gauss', size = gaborSize) 
 
 lilGabor = visual.GratingStim(win, units = 'pix',
-                              sf = gaborSF, mask = 'gauss', size = gaborSize) 
-
-
+                              sf = gaborSF, mask = 'gauss', size = gaborSizeDVA) 
 #%%#
 '''
 Make trial list for this subject.
@@ -241,8 +271,8 @@ ndown = 2 # Nb of correct responses before decreasing the contrast
 nup = 1 # Nb of incorrect responses before increasing the contrast
 down_step = 0.02
 up_step = 0.02
-maxContrast = 0.25
-
+#maxContrast = 0.25
+maxContrast = 0.95
 # initializes some dictionaries used by the staircase() function
 ################################################################
 thisCond = [] 
@@ -453,9 +483,9 @@ if practice == 'yes':
 
 
 
-'''
-TEST LOOP
-'''
+#%%
+# Test loop #
+
 
 # Initialize output arrays
 
@@ -676,7 +706,7 @@ for n in range(actualNtrials):
     session_array.append(exp_info['session'])
     eccentricity_array.append(eccentricity)
     eccentricityDVA_array.append(eccentricityDVA)
-    gaborSize_array.append(gaborSize)
+    #gaborSize_array.append(gaborSize)
     gaborSizeDVA_array.append(gaborSizeDVA)
     gaborSF_array.append(gaborSF)
     gaborSFDVA_array.append(gaborSFDVA)
@@ -689,7 +719,7 @@ output_file = pd.DataFrame({'participant': subject_array,
                             'session': session_array,
                             'eccentricity': eccentricity_array,
                             'eccentricityDVA': eccentricityDVA_array,
-                            'gaborSize': gaborSize_array,
+                            #'gaborSize': gaborSize_array,
                             'gaborSizeDVA': gaborSizeDVA_array,
                             'gaborSF': gaborSF_array,
                             'gaborSFDVA': gaborSFDVA_array,                            

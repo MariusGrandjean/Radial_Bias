@@ -46,16 +46,15 @@ palette <- c("blue", "mediumseagreen")
 # data ----------------------------------------------------------------------------------------------------------------
 # lit tous les fichiers dans le dossier data et les met dans un dataframe
 df <-
-  list.files(path = "C:/Users/grandjeamari/Documents/Travail/UCLouvain/PhD/Projet/Projet-Saccades/Analysis/Data/Radial bias", full.names = TRUE, pattern = "*.csv") %>%
+  list.files(path = "C:/Users/grandjeamari/Documents/Travail/UCLouvain/PhD/Projet/Projet-Saccades/Analysis/Data/Radial bias/65_trials", full.names = TRUE, pattern = "*.csv") %>%
   map_df(~read_csv(.))
 
 unique(df$participant)
 
-theSubj = 'PIBE29' #ici remplace par le nom du sujet dont tu veux ploter les donnees (ce qu'on rentre dans la dialbox psychopy)
+theSubj = 'ALVA03' #ici remplace par le nom du sujet dont tu veux ploter les donnees (ce qu'on rentre dans la dialbox psychopy)
 
 df %<>%
   filter(participant == theSubj) # garde dans df seulement les donnees de theSubj
-
 
 
 
@@ -105,7 +104,8 @@ fitH <-
     df_fit %>% filter(meridian == "meridianH"),
     x = contrastbin,
     k = meanAcc,
-    grouping = c("ori", "VF"),
+    #grouping = c("ori", "VF"),
+    grouping = c("ori"),
     #xperimental factors
     fun = cum_normal_fun,
     #model = cumulative normal function 
@@ -123,7 +123,8 @@ fitH <-
 # plot horizontal meridian
 df %>% 
   filter(meridian == "meridianH") %>% 
-  group_by(eccentricity, VF, ori, contrastbin) %>% 
+  #group_by(eccentricity, VF, ori, contrastbin) %>%
+  group_by(eccentricity, ori, contrastbin) %>% 
   dplyr::summarise(meanAcc = mean(accuracy),
                    n = n()) %>% 
   ggplot(aes(x = contrastbin, y = meanAcc, color = ori)) +
@@ -132,9 +133,10 @@ df %>%
   geom_line (data = fitH$curves, aes(x = x, y = y, color = ori), size = 2, alpha = 0.6) +
   geom_linerange(data = fitH$thresholds, 
                  aes_string(x = "thre", ymin = fitH$guess, ymax = fitH$thresholds$prob), inherit.aes = FALSE, 
-                 color = c(palette[1],palette[1],palette[2],palette[2]),
+                 #color = c(palette[1],palette[1],palette[2],palette[2]),
+                 color = c(palette[1],palette[2]),
                  size = 1) +
-  facet_grid(~VF) +
+  #facet_grid(~VF) +
   geom_hline(yintercept = 0.25, color = "black", size = 0.5) +
   geom_hline(yintercept = 0.625, color = "black", linetype = "dotted", size = 0.5) +
   scale_x_continuous(breaks = seq(1, 6, 1)) +
@@ -143,8 +145,8 @@ df %>%
   scale_size(guide = 'none') +
   labs(x = "Contraste", y = "Précision moyenne") +
   customtheme +
-  theme(legend.title = element_blank()) #+
-  # ggtitle('Méridien horizontal') 
+  theme(legend.title = element_blank()) +
+  ggtitle("Fig1 : Horizontal meridian") 
   
 
 thr.H <- fitH$thresholds
@@ -174,7 +176,8 @@ fitV <-
     df_fit %>% filter(meridian == "meridianV"),
     x = contrastbin,
     k = meanAcc,
-    grouping = c("ori", "VF"),
+    #grouping = c("ori", "VF"),
+    grouping = c("ori"),
     #xperimental factors
     fun = cum_normal_fun,
     #model = cumulative normal function 
@@ -192,7 +195,8 @@ fitV <-
 # plot vertical meridian
 df %>% 
   filter(meridian == "meridianV") %>% 
-  group_by(eccentricity, VF, ori, contrastbin) %>% 
+  #group_by(eccentricity, VF, ori, contrastbin) %>% 
+  group_by(eccentricity, ori, contrastbin) %>% 
   dplyr::summarise(meanAcc = mean(accuracy),
                    n = n()) %>% 
   ggplot(aes(x = contrastbin, y = meanAcc, color = ori)) +
@@ -200,9 +204,10 @@ df %>%
   geom_line (data = fitV$curves, aes(x = x, y = y, color = ori), size = 2, alpha = 0.6) +
   geom_linerange(data = fitV$thresholds, 
                  aes_string(x = "thre", ymin = fitH$guess, ymax = fitH$thresholds$prob), inherit.aes = FALSE, 
-                 color = c(palette[1],palette[1],palette[2],palette[2]),
+                 #color = c(palette[1],palette[1],palette[2],palette[2]),
+                 color = c(palette[1],palette[2]),
                  size = 1) +
-  facet_grid(~VF) +
+  #facet_grid(~VF) +
   geom_hline(yintercept = 0.25, color = "black", size = 0.5) +
   geom_hline(yintercept = 0.625, color = "black", linetype = "dotted", size = 0.5) +
   scale_x_continuous(breaks = seq(1, 6, 1)) +
@@ -211,9 +216,8 @@ df %>%
   scale_size(guide = 'none') +
   labs(x = "Contraste", y = "Précision moyenne") +
   customtheme +
-  theme(legend.position = "none",
-        legend.title = element_blank()) #+
-  # ggtitle('Méridien vertical') 
+  theme(legend.title = element_blank())+
+  ggtitle("Fig2 : Vertical meridian")
 
 
 thr.V <- fitV$thresholds
@@ -235,20 +239,6 @@ thr.V %>% ggplot(aes(x = VF, y = thre, fill = ori, color = ori)) +
         legend.title = element_blank()) 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# 
 # # Plot staircase ------------------------------------------------------------------------------------------------------
 # 
 # vertical meridian
@@ -259,7 +249,9 @@ df %>%
   geom_point() +
   geom_line() +
   facet_grid(.~condition) +
-  customtheme
+  customtheme+
+  ggtitle("Fig3 : Staircase vertical meridian")
+
 
 # horizontal meridian
 df %>%
@@ -269,41 +261,8 @@ df %>%
   geom_point() +
   geom_line() +
   facet_grid(.~condition) +
-  customtheme
-#
-# 
-# # plot data / condition -----------------------------------------------------------------------------------------------
-# 
-# plot data horizontal meridian
-df %>%
-  filter(meridian == "meridianH") %>%
-  group_by(eccentricity, VF, ori, contrastbin) %>%
-  dplyr::summarise(meanAcc = mean(accuracy),
-                   n = n()) %>%
-  ggplot(aes(x = contrastbin, y = meanAcc, color = ori)) +
-  geom_point(aes(size = n)) +
-  geom_line() +
-  facet_grid(eccentricity~VF) +
   customtheme +
-  ggtitle('horizontal meridian') +
-  geom_hline(yintercept = 0.25, linetype = "dashed", color = "orange", size = 1) +
-  ylim(0,1)
+  ggtitle("Fig4 : Staircase horizontal meridian")
 
-# # plot data vertical meridian
-# df %>% 
-#   filter(meridian == "meridianV") %>%   
-#   group_by(eccentricity, VF, ori, contrastbin) %>% 
-#   dplyr::summarise(meanAcc = mean(accuracy),
-#                    n = n()) %>% 
-#   ggplot(aes(x = contrastbin, y = meanAcc, color = ori)) +
-#   geom_point(aes(size = n)) +
-#   geom_line() +
-#   facet_grid(eccentricity~VF) +
-#   customtheme +
-#   ggtitle('vertical meridian') +
-#   geom_hline(yintercept = 0.25, linetype = "dashed", color = "orange", size = 1) +
-#   ylim(0,1)
-# 
-# 
 
 
