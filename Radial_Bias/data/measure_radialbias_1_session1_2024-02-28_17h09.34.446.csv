@@ -1,0 +1,9 @@
+participant,exp_name,date,session,eccentricity,eccentricityDVA,gaborSizeDVA,gaborSF,gaborSFDVA,training-test,trial,xPosition,yPosition,meridian,contrast,ori,VF,resp,accuracy,accCount,condition,trialCount,contrastRule
+1,measure_radialbias,2024-02-28_17h09.34.446,1,15,752,"(200, 200)",0.198,4,test,1,752,0,meridianH,0.84,horizontal,right,right,1,1,right_horizontal,1,highCont
+1,measure_radialbias,2024-02-28_17h09.34.446,1,15,752,"(200, 200)",0.198,4,test,2,0,-752,meridianV,0.25,horizontal,down,left,0,0,down_horizontal,1,staircase
+1,measure_radialbias,2024-02-28_17h09.34.446,1,15,752,"(200, 200)",0.198,4,test,3,752,0,meridianH,0.25,vertical,right,right,1,1,right_vertical,1,staircase
+1,measure_radialbias,2024-02-28_17h09.34.446,1,15,752,"(200, 200)",0.198,4,test,4,0,-752,meridianV,0.25,vertical,down,left,0,0,down_vertical,1,staircase
+1,measure_radialbias,2024-02-28_17h09.34.446,1,15,752,"(200, 200)",0.198,4,test,5,0,752,meridianV,0.25,horizontal,up,left,0,0,up_horizontal,1,staircase
+1,measure_radialbias,2024-02-28_17h09.34.446,1,15,752,"(200, 200)",0.198,4,test,6,0,752,meridianV,0.92,vertical,up,left,0,0,up_vertical,1,highCont
+1,measure_radialbias,2024-02-28_17h09.34.446,1,15,752,"(200, 200)",0.198,4,test,7,-752,0,meridianH,0.25,horizontal,left,left,1,1,left_horizontal,1,staircase
+1,measure_radialbias,2024-02-28_17h09.34.446,1,15,752,"(200, 200)",0.198,4,test,8,-752,0,meridianH,0.25,vertical,left,down,0,0,left_vertical,1,staircase

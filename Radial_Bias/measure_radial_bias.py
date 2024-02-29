@@ -31,7 +31,7 @@ print("Current working directory: {0}".format(os.getcwd()))
 
 # Change the current working directory HERE
 #cwd = os.chdir(r'C:\Users\alrouxsi\Documents\Rprojects\2023_iTRAC (Marius)\measure_radial_bias')
-cwd = os.chdir(r'C:/Users/grandjeamari/Documents/Travail/UCLouvain/PhD/Projet/Projet-Saccades/Tasks/Radial_Bias/Radial_Bias')
+cwd = os.chdir(r'C:/Users/humanvisionlab/Documents/Marius/measure_radial_bias')
 
 print("Current working directory: {0}".format(os.getcwd()))
 cwd = format(os.getcwd())
@@ -51,10 +51,10 @@ exp_name = 'measure_radialbias'
 exp_info = {
     'participant': '',
     'session': '',
-    'screendistance(cm)': '60',
-    'screenwidth(cm)': '60',
-    'screenresolutionhori(pixels)': '1920', 
-    'screenresolutionvert(pixels)': '1080',
+    'screendistance(cm)': '90',
+    'screenwidth(cm)': '120',
+    'screenresolutionhori(pixels)': '3840', 
+    'screenresolutionvert(pixels)': '2160',
     'refreshrate(hz)': '59',
     'eccentricity (15° or 20°, default is 15)': 15,
     'gabor patch size': 6,
@@ -111,14 +111,16 @@ else:
     
 if gaborSFDVA == 4:
     gaborSF = 0.1980 # Size in pixels 
+    #gaborSF = 0.02
+
 else:
     core.quit()
     print('Parameters are only set for a spatial frequency of 4 cpd. Add others to the code if you want to test with another SF')
     
 
 # Presentation duration
-#stimDuration = 0.150 
-stimDuration = 1
+stimDuration = 0.150 
+
 # Number of practice trials
 nPracticeTrials = 10
 
@@ -134,7 +136,6 @@ waitColor    = (-0.2, -0.2, -0.2) #for when waiting for a response
 notOKcolor   = (-1, 0.7, -1) 
 OKcolor      = (0.7, -1, -1) #both these colors look weird with the texture that
                              #makes the fixation, but it is ok (notOKcolor is pinkish, OKcolor is blueish)
-
 
 # Initialise these variables
 thisTrial = 0
@@ -167,7 +168,7 @@ framelength = 1000/(float(framerate))
 OLED.setSizePix(scrsize)
 #OLED.setSizePix((1920, 1200)) 
 win = visual.Window(monitor = OLED,
-                    color = (-1, -1, -1),
+                    color = "grey",
                     units = 'pix',
                     fullscr = True,
                     allowGUI = True)
@@ -208,7 +209,7 @@ fixation = visual.GratingStim(win, tex=fix, mask='gauss', units='pix', size=20)
 ##################
 bleepf = os.path.join(stimdir + 'blip.wav')
 bleep = sound.Sound(value=bleepf)
-bleep.setVolume(0.1)
+bleep.setVolume(0.01)
 
 # Pause text
 ############
@@ -216,10 +217,10 @@ pause = visual.TextStim(win, color = (-1, -1, -0.5))
 
 # Gaussian Gray background
 ##########################
-gaussianGrayf = os.path.join(stimdir + 'gaussianGray.bmp') 
-gaussianGray = visual.ImageStim(win, image = gaussianGrayf,
-                                units = 'pix', pos = (0,0), 
-                                size = (bgSize,bgSize))
+#gaussianGrayf = os.path.join(stimdir + 'gaussianGray.bmp') 
+#gaussianGray = visual.ImageStim(win, image = gaussianGrayf,
+#                                units = 'pix', pos = (0,0), 
+#                                size = (bgSize,bgSize))
 
 #lilGabor = visual.GratingStim(win, units = 'pix',
 #                              sf = gaborSF, mask = 'gauss', size = gaborSize) 
@@ -271,8 +272,8 @@ ndown = 2 # Nb of correct responses before decreasing the contrast
 nup = 1 # Nb of incorrect responses before increasing the contrast
 down_step = 0.02
 up_step = 0.02
-#maxContrast = 0.25
-maxContrast = 0.95
+maxContrast = 0.25
+
 # initializes some dictionaries used by the staircase() function
 ################################################################
 thisCond = [] 
@@ -348,7 +349,7 @@ instructiontexts = {
 for text in instructiontexts:
     instructions = textpage
     instructions.text = instructiontexts[text]
-    gaussianGray.draw()
+    #gaussianGray.draw()
     instructions.draw()
     win.flip()
     event.clearEvents()
@@ -370,7 +371,7 @@ if practice == 'yes':
     for practicetrial in range(nPracticeTrials):
       
         # Draw fixation
-        gaussianGray.draw()
+        #gaussianGray.draw()
         fixation.color = neutralColor
         fixation.draw()
         win.flip()
@@ -407,13 +408,13 @@ if practice == 'yes':
         lilGabor.contrast = zecontrast
                
         # Draw stimulus
-        gaussianGray.draw()
+        #gaussianGray.draw()
         bleep.play()
         lilGabor.draw()
         fixation.draw()
         win.flip()
         core.wait(stimDuration) 
-        gaussianGray.draw()
+        #gaussianGray.draw()
         fixation.color = waitColor
         fixation.draw()
         win.flip()
@@ -456,7 +457,7 @@ if practice == 'yes':
         else:
             accColor = notOKcolor
             
-        gaussianGray.draw()
+        #gaussianGray.draw()
         fixation.color = accColor
         fixation.draw()
         win.flip()
@@ -467,7 +468,7 @@ if practice == 'yes':
             instructions = textpage
             instructions.text = """ Vous êtes maintenant prêt-e à commencer. \n \n 
                                     Appuyez sur ESPACE pour commencer."""
-            gaussianGray.draw()
+            #gaussianGray.draw()
             instructions.draw()
             win.flip()
             event.clearEvents()
@@ -503,8 +504,7 @@ accCount_array = []
 thisCond_array = []
 trialCount_array = []
 contrastRule_array = []
-
-
+RT_array = []
 
 win.flip()
 trial = 0
@@ -562,26 +562,25 @@ for thisTrial in range(len(triallist)):
     
         ''' Draw stimuli on screen '''
         # Draw fixation
-        gaussianGray.draw()
+        #gaussianGray.draw()
         fixation.color = neutralColor
         fixation.draw()
         win.flip()
         core.wait(0.5) # wait for 500ms
             
         # Draw stimulus
-        gaussianGray.draw()
+        #gaussianGray.draw()
         bleep.play()
         lilGabor.draw()
         fixation.draw()
         win.flip()
         core.wait(stimDuration) 
-        gaussianGray.draw()
+        #gaussianGray.draw()
         fixation.color = waitColor
         fixation.draw()
         win.flip()
         event.clearEvents()
         keys = event.waitKeys(maxWait=timelimit, keyList=['left', 'right', 'up', 'down', 'q'])
-    
     
         ''' Take response, calculate accuracy and give feedback (fixation color) '''
          # If a key is pressed, take the response. If not, just remove the images from the screen    
@@ -604,7 +603,7 @@ for thisTrial in range(len(triallist)):
                 resp = keys[0]
         else: 
             resp = 'noResp'
-            
+        
         # Check accuracy
         if resp == theVF:
             acc = 1
@@ -622,12 +621,12 @@ for thisTrial in range(len(triallist)):
         else:
             accColor = notOKcolor
         
-        gaussianGray.draw()
+        #gaussianGray.draw()
         fixation.color = accColor
         fixation.draw()
         win.flip()
         core.wait(0.5) # wait 
-        gaussianGray.draw()
+        #gaussianGray.draw()
         fixation.color = neutralColor
         fixation.draw()
         win.flip()
@@ -644,6 +643,7 @@ for thisTrial in range(len(triallist)):
         VF_array.append(theVF)
         resp_array.append(resp)
         accuracy_array.append(acc)
+        #RT_array.append(time)
         accCount_array.append(acc_count_dict[thisCond])
         thisCond_array.append(thisCond)
         trialCount_array.append(trial_count_dict[thisCond])
@@ -655,7 +655,7 @@ for thisTrial in range(len(triallist)):
             progression = thisTrial*100/nTrialsTotal
             pause_txt = "Vous pouvez faire une petite pause \n  \nVous avez terminé " + str(round(progression,2)) + '%' + " de l'experience \n \n Appuyez sur ESPACE pour continuer."
             pause.setText(pause_txt)
-            gaussianGray.draw()
+            #gaussianGray.draw()
             pause.draw()
             win.flip() 
             event.clearEvents()
@@ -665,10 +665,9 @@ for thisTrial in range(len(triallist)):
                 win.close()
                 core.quit()
             if 'space' in keys:
-                gaussianGray.draw()
+                #gaussianGray.draw()
                 win.flip()
-                core.wait(2)
-            
+                core.wait(2)  
 win.close()
 
 
@@ -694,7 +693,7 @@ date_array = []
 session_array = []
 eccentricity_array = [] 
 eccentricityDVA_array = []
-gaborSize_array = []
+#gaborSize_array = []
 gaborSizeDVA_array = []
 gaborSF_array = []
 gaborSFDVA_array = []
@@ -706,7 +705,7 @@ for n in range(actualNtrials):
     session_array.append(exp_info['session'])
     eccentricity_array.append(eccentricity)
     eccentricityDVA_array.append(eccentricityDVA)
-    #gaborSize_array.append(gaborSize)
+    #RT_array.append(time)
     gaborSizeDVA_array.append(gaborSizeDVA)
     gaborSF_array.append(gaborSF)
     gaborSFDVA_array.append(gaborSFDVA)
@@ -719,9 +718,8 @@ output_file = pd.DataFrame({'participant': subject_array,
                             'session': session_array,
                             'eccentricity': eccentricity_array,
                             'eccentricityDVA': eccentricityDVA_array,
-                            #'gaborSize': gaborSize_array,
                             'gaborSizeDVA': gaborSizeDVA_array,
-                            'gaborSF': gaborSF_array,
+                            #'gaborSF': gaborSF_array,
                             'gaborSFDVA': gaborSFDVA_array,                            
                             'training-test': trainingtest_array,
                             'trial': trial_array,
@@ -733,6 +731,7 @@ output_file = pd.DataFrame({'participant': subject_array,
                             'VF': VF_array,
                             'resp': resp_array,
                             'accuracy': accuracy_array,
+                            #'rt': RT_array,
                             'accCount': accCount_array,
                             'condition': thisCond_array,
                             'trialCount': trialCount_array,
@@ -745,5 +744,5 @@ output_file = pd.DataFrame({'participant': subject_array,
 output_file.to_csv(data_fname, index = False)
 
    
-print('FILES SAVED')
+print('FILE SAVED')
 
