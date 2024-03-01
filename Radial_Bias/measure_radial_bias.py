@@ -31,7 +31,8 @@ print("Current working directory: {0}".format(os.getcwd()))
 
 # Change the current working directory HERE
 #cwd = os.chdir(r'C:\Users\alrouxsi\Documents\Rprojects\2023_iTRAC (Marius)\measure_radial_bias')
-cwd = os.chdir(r'C:/Users/humanvisionlab/Documents/Marius/measure_radial_bias')
+#cwd = os.chdir(r'C:/Users/humanvisionlab/Documents/Marius/measure_radial_bias')
+cwd = os.chdir(r'C:/Users/grandjeamari/Documents/Travail/UCLouvain/PhD/Projet/Projet-Saccades/Tasks/Radial_Bias/Radial_Bias')
 
 print("Current working directory: {0}".format(os.getcwd()))
 cwd = format(os.getcwd())
@@ -222,11 +223,12 @@ pause = visual.TextStim(win, color = (-1, -1, -0.5))
 #                                units = 'pix', pos = (0,0), 
 #                                size = (bgSize,bgSize))
 
-#lilGabor = visual.GratingStim(win, units = 'pix',
-#                              sf = gaborSF, mask = 'gauss', size = gaborSize) 
+
+# lilGabor = visual.GratingStim(win, units = 'pix',
+#                               sf = gaborSF, mask = 'gauss', size = gaborSizeDVA)
 
 lilGabor = visual.GratingStim(win, units = 'pix',
-                              sf = gaborSF, mask = 'gauss', size = gaborSizeDVA) 
+                              sf = gaborSF, mask = 'raisedCos', size = gaborSizeDVA)  
 #%%#
 '''
 Make trial list for this subject.
@@ -509,7 +511,6 @@ RT_array = []
 win.flip()
 trial = 0
 
-
 for thisTrial in range(len(triallist)): 
       
         trial = trial + 1
@@ -652,8 +653,9 @@ for thisTrial in range(len(triallist)):
         ''' Should we make a small break? ''' 
         if (trial%25 == 0):
             # PAUSE
+            mean_accuracy = np.mean(accuracy_array) * 100
             progression = thisTrial*100/nTrialsTotal
-            pause_txt = "Vous pouvez faire une petite pause \n  \nVous avez terminé " + str(round(progression,2)) + '%' + " de l'experience \n \n Appuyez sur ESPACE pour continuer."
+            pause_txt = "Vous pouvez faire une petite pause \n  \nVous avez terminé " + str(round(progression,2)) + '%' + " de l'experience \n \n ""Votre score est de " + str(mean_accuracy)+'%'+" \n \n Appuyez sur ESPACE pour continuer."
             pause.setText(pause_txt)
             #gaussianGray.draw()
             pause.draw()

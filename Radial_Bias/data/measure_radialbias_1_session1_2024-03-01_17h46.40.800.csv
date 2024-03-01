@@ -1,0 +1,26 @@
+participant,exp_name,date,session,eccentricity,eccentricityDVA,gaborSizeDVA,gaborSFDVA,training-test,trial,xPosition,yPosition,meridian,contrast,ori,VF,resp,accuracy,accCount,condition,trialCount,contrastRule
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,1,-752,0,meridianH,0.87,horizontal,left,right,0,0,left_horizontal,1,highCont
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,2,0,-752,meridianV,0.25,vertical,down,left,0,0,down_vertical,1,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,3,752,0,meridianH,0.25,vertical,right,right,1,1,right_vertical,1,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,4,0,-752,meridianV,0.25,horizontal,down,up,0,0,down_horizontal,1,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,5,0,-752,meridianV,0.27,vertical,down,down,1,1,down_vertical,2,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,6,0,-752,meridianV,0.85,vertical,down,left,0,0,down_vertical,3,highCont
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,7,0,752,meridianV,0.25,vertical,up,right,0,0,up_vertical,1,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,8,752,0,meridianH,0.25,horizontal,right,right,1,1,right_horizontal,1,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,9,-752,0,meridianH,0.27,horizontal,left,left,1,1,left_horizontal,2,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,10,752,0,meridianH,0.25,horizontal,right,right,1,2,right_horizontal,2,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,11,0,752,meridianV,0.73,horizontal,up,down,0,0,up_horizontal,1,highCont
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,12,0,752,meridianV,0.27,vertical,up,up,1,1,up_vertical,2,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,13,0,752,meridianV,0.27,horizontal,up,left,0,0,up_horizontal,2,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,14,0,752,meridianV,0.27,vertical,up,right,0,0,up_vertical,3,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,15,752,0,meridianH,0.23,horizontal,right,right,1,1,right_horizontal,3,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,16,0,752,meridianV,0.7,vertical,up,down,0,0,up_vertical,4,highCont
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,17,0,752,meridianV,0.29000000000000004,vertical,up,up,1,1,up_vertical,5,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,18,0,752,meridianV,0.29000000000000004,horizontal,up,left,0,0,up_horizontal,3,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,19,-752,0,meridianH,0.25,vertical,left,right,0,0,left_vertical,1,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,20,0,-752,meridianV,0.29000000000000004,vertical,down,left,0,0,down_vertical,4,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,21,752,0,meridianH,0.83,vertical,right,right,1,2,right_vertical,2,highCont
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,22,-752,0,meridianH,0.27,horizontal,left,left,1,2,left_horizontal,3,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,23,-752,0,meridianH,0.27,vertical,left,down,0,0,left_vertical,2,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,24,752,0,meridianH,0.23,vertical,right,down,0,0,right_vertical,3,staircase
+1,measure_radialbias,2024-03-01_17h46.40.800,1,15,752,"(200, 200)",4,test,25,0,752,meridianV,0.31000000000000005,horizontal,up,right,0,0,up_horizontal,4,staircase

@@ -121,33 +121,42 @@ fitH <-
   )
   
 # plot horizontal meridian
-df %>% 
-  filter(meridian == "meridianH") %>% 
-  #group_by(eccentricity, VF, ori, contrastbin) %>%
-  group_by(eccentricity, ori, contrastbin) %>% 
-  dplyr::summarise(meanAcc = mean(accuracy),
-                   n = n()) %>% 
+df %>%
+  filter(meridian == "meridianH") %>%
+  group_by(eccentricity, ori, contrastbin) %>%
+  # Summarize within each group
+  dplyr::summarise(
+    meanAcc = mean(accuracy), # Calculate mean accuracy
+    n = n()                   # Count observations in each group
+  ) %>%
   ggplot(aes(x = contrastbin, y = meanAcc, color = ori)) +
   geom_point(aes(size = n)) +
-  # geom_line() +
-  geom_line (data = fitH$curves, aes(x = x, y = y, color = ori), size = 2, alpha = 0.6) +
-  geom_linerange(data = fitH$thresholds, 
-                 aes_string(x = "thre", ymin = fitH$guess, ymax = fitH$thresholds$prob), inherit.aes = FALSE, 
-                 #color = c(palette[1],palette[1],palette[2],palette[2]),
-                 color = c(palette[1],palette[2]),
-                 size = 1) +
-  #facet_grid(~VF) +
+  # Add line geom for fitted curve from "fitH$curves" data
+  geom_line(
+    data = fitH$curves,
+    aes(x = x, y = y, color = ori),
+    size = 2,
+    alpha = 0.6
+  ) +
+  # Add shaded error bars for thresholds from "fitH$thresholds" data
+  geom_linerange(
+    data = fitH$thresholds,
+    aes_string(x = "thre", ymin = fitH$guess, ymax = fitH$thresholds$prob),
+    inherit.aes = FALSE,
+    color = c(palette[1], palette[2]),  # Set two colors for thresholds
+    size = 1
+  ) +
+  # Add horizontal lines at specific y-intercepts
   geom_hline(yintercept = 0.25, color = "black", size = 0.5) +
   geom_hline(yintercept = 0.625, color = "black", linetype = "dotted", size = 0.5) +
   scale_x_continuous(breaks = seq(1, 6, 1)) +
-  scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.63, 0.75, 1), limits = c(0,1)) +
+  scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.63, 0.75, 1), limits = c(0, 1)) +
   scale_color_manual(values = palette) +
   scale_size(guide = 'none') +
   labs(x = "Contraste", y = "Précision moyenne") +
   customtheme +
   theme(legend.title = element_blank()) +
-  ggtitle("Fig1 : Horizontal meridian") 
-  
+  ggtitle("Fig1 : Horizontal meridian")
 
 thr.H <- fitH$thresholds
 thr.H %>% ggplot(aes(x = VF, y = thre, fill = ori, color = ori)) +
