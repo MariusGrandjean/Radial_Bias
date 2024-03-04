@@ -57,7 +57,6 @@ df %<>%
   filter(participant == theSubj) # garde dans df seulement les donnees de theSubj
 
 
-
 # Bin contrast ------------------------------------------------------------
 df <- df %>%
   mutate(contrastINT = as.integer(contrast*100)) %>% 

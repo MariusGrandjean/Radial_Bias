@@ -126,7 +126,7 @@ stimDuration = 0.150
 nPracticeTrials = 10
 
 # Number of trials that we want for each condition (e.g., condition [VF = left, orientation = horizontal])
-nTrialsPerStaircase = 65 # should probably be at least 50 or 60
+nTrialsPerStaircase = 65 # should probably be at least 50 or 60 --> 65 for better data
 
 # max time (in s) to wait for a response
 timelimit = 3
@@ -150,7 +150,8 @@ np.random.shuffle(highContrastLevels)
 # size of the gaussian background
 bgSize = 3299
 
-
+#initialize timer
+timer = core.Clock()
 #%%#
 '''
 Prepare window object and stimuli
@@ -334,12 +335,12 @@ win.flip()
 '''
 INSTRUCTIONS AND PRACTICE
 '''
-textpage = visual.TextStim(win, height=30, alignHoriz='center', wrapWidth=1000)
+textpage = visual.TextStim(win, pos= [0,0], height=30, alignHoriz='center', wrapWidth=1000)
 
 instructiontexts = {
     1 : """Bienvenue ! \n \n Ajustez la position du siège et de la mentonière pour être confortablement assis. \n \n
             Appuyez sur ESPACE pour continuer.""",
-    2 : """Cette expérience a pour but d’étudier l'acuité visuelle en vision périphérique, c’est-à-dire la vision sur les côtés du champ visuel. \n \n \n 
+    2 : """Cette expérience a pour but d’étudier l'acuité visuelle en vision périphérique, c’est-à-dire la vision sur les côtés du champ visuel. \n \n
             Appuyez sur ESPACE pour continuer.""",
     3 : """Pendant l'expérience, il vous est demandé de fixer un point au centre de l'écran, et de ne jamais le lacher du regard. \n
             Un stimulus non identifiable apparaitra brièvement à droite, à gauche, en haut ou en bas de l'écran.\n 
@@ -580,13 +581,15 @@ for thisTrial in range(len(triallist)):
         fixation.color = waitColor
         fixation.draw()
         win.flip()
+        timer.reset()
         event.clearEvents()
         keys = event.waitKeys(maxWait=timelimit, keyList=['left', 'right', 'up', 'down', 'q'])
     
         ''' Take response, calculate accuracy and give feedback (fixation color) '''
          # If a key is pressed, take the response. If not, just remove the images from the screen    
         if keys:
-            resp = keys[0]                                        
+            resp = keys[0]
+            time = timer.getTime()                                        
             #At this point, there are still no keys pressed. So "if not keys" is definitely 
             #going to be processed.
             #After removing the images from the screen, still listening for a keypress. 
@@ -604,7 +607,7 @@ for thisTrial in range(len(triallist)):
                 resp = keys[0]
         else: 
             resp = 'noResp'
-        
+            time = timelimit
         # Check accuracy
         if resp == theVF:
             acc = 1
@@ -644,7 +647,7 @@ for thisTrial in range(len(triallist)):
         VF_array.append(theVF)
         resp_array.append(resp)
         accuracy_array.append(acc)
-        #RT_array.append(time)
+        RT_array.append(time)
         accCount_array.append(acc_count_dict[thisCond])
         thisCond_array.append(thisCond)
         trialCount_array.append(trial_count_dict[thisCond])
@@ -655,7 +658,7 @@ for thisTrial in range(len(triallist)):
             # PAUSE
             mean_accuracy = np.mean(accuracy_array) * 100
             progression = thisTrial*100/nTrialsTotal
-            pause_txt = "Vous pouvez faire une petite pause \n  \nVous avez terminé " + str(round(progression,2)) + '%' + " de l'experience \n \n ""Votre score est de " + str(mean_accuracy)+'%'+" \n \n Appuyez sur ESPACE pour continuer."
+            pause_txt = "Vous pouvez faire une petite pause \n  \nVous avez terminé " + str(round(progression,2)) + '%' + " de l'experience \n \n ""Votre score est de " + str(round(mean_accuracy,2))+'%'+" \n \n Appuyez sur ESPACE pour continuer."
             pause.setText(pause_txt)
             #gaussianGray.draw()
             pause.draw()
@@ -707,7 +710,6 @@ for n in range(actualNtrials):
     session_array.append(exp_info['session'])
     eccentricity_array.append(eccentricity)
     eccentricityDVA_array.append(eccentricityDVA)
-    #RT_array.append(time)
     gaborSizeDVA_array.append(gaborSizeDVA)
     gaborSF_array.append(gaborSF)
     gaborSFDVA_array.append(gaborSFDVA)
@@ -733,7 +735,7 @@ output_file = pd.DataFrame({'participant': subject_array,
                             'VF': VF_array,
                             'resp': resp_array,
                             'accuracy': accuracy_array,
-                            #'rt': RT_array,
+                            'rt': RT_array,
                             'accCount': accCount_array,
                             'condition': thisCond_array,
                             'trialCount': trialCount_array,
