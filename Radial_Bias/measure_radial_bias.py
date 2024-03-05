@@ -31,8 +31,8 @@ print("Current working directory: {0}".format(os.getcwd()))
 
 # Change the current working directory HERE
 #cwd = os.chdir(r'C:\Users\alrouxsi\Documents\Rprojects\2023_iTRAC (Marius)\measure_radial_bias')
-#cwd = os.chdir(r'C:/Users/humanvisionlab/Documents/Marius/measure_radial_bias')
-cwd = os.chdir(r'C:/Users/grandjeamari/Documents/Travail/UCLouvain/PhD/Projet/Projet-Saccades/Tasks/Radial_Bias/Radial_Bias')
+cwd = os.chdir(r'C:/Users/humanvisionlab/Documents/Marius/measure_radial_bias')
+#cwd = os.chdir(r'C:/Users/grandjeamari/Documents/Travail/UCLouvain/PhD/Projet/Projet-Saccades/Tasks/Radial_Bias/Radial_Bias')
 
 print("Current working directory: {0}".format(os.getcwd()))
 cwd = format(os.getcwd())
@@ -654,11 +654,21 @@ for thisTrial in range(len(triallist)):
     
     
         ''' Should we make a small break? ''' 
-        if (trial%25 == 0):
+        if (trial % 25 == 0):
             # PAUSE
-            mean_accuracy = np.mean(accuracy_array) * 100
             progression = thisTrial*100/nTrialsTotal
-            pause_txt = "Vous pouvez faire une petite pause \n  \nVous avez terminé " + str(round(progression,2)) + '%' + " de l'experience \n \n ""Votre score est de " + str(round(mean_accuracy,2))+'%'+" \n \n Appuyez sur ESPACE pour continuer."
+            # Calculate mean_accuracy based on the last 25 trials
+            # Ensure there are at least 25 trials completed before calculating
+            if trial >= 25:
+                last_25_trials_accuracy = accuracy_array[-25:]
+                mean_accuracy = np.mean(last_25_trials_accuracy) * 100
+            else:
+                mean_accuracy = np.mean(accuracy_array) * 100 # Fallback to overall accuracy for the first 25 trials
+            if mean_accuracy >= 50:
+                pause = visual.TextStim(win, color = "green")
+            else:
+                pause = visual.TextStim(win, color = "red")
+            pause_txt = "Votre score est de " + str(round(mean_accuracy,2))+'%.'+"\n\n\nVous pouvez faire une petite pause. \n  \nVous avez terminé " + str(round(progression,2)) + '%' + " de l'experience. \n \n "+" \n \n Appuyez sur ESPACE pour continuer."
             pause.setText(pause_txt)
             #gaussianGray.draw()
             pause.draw()
