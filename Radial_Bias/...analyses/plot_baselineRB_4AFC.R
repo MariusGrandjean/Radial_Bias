@@ -51,7 +51,7 @@ df <-
 
 unique(df$participant)
 
-theSubj = 'ALVA03' #ici remplace par le nom du sujet dont tu veux ploter les donnees (ce qu'on rentre dans la dialbox psychopy)
+theSubj = 'PIBE29' #ici remplace par le nom du sujet dont tu veux ploter les donnees (ce qu'on rentre dans la dialbox psychopy)
 
 df %<>%
   filter(participant == theSubj) # garde dans df seulement les donnees de theSubj
@@ -258,6 +258,7 @@ df %>%
   geom_line() +
   facet_grid(.~condition) +
   customtheme+
+  ylim(0,1)+
   ggtitle("Fig3 : Staircase vertical meridian")
 
 
@@ -270,6 +271,7 @@ df %>%
   geom_line() +
   facet_grid(.~condition) +
   customtheme +
+  ylim(0,1)+
   ggtitle("Fig4 : Staircase horizontal meridian")
 
 

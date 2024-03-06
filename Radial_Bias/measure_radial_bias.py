@@ -201,7 +201,9 @@ real_vert = dd * math.tan(math.radians(alphaH / 2))  # image height in cm = 2dta
 real_hori_pix = round(real_hori * screenWidthPix / screenWidthCm)  # image width in pixels
 real_vert_pix = round(real_vert * screenWidthPix / screenWidthCm)  # image height in pixels
 
-gaborSizeDVA = (real_hori_pix, real_vert_pix)
+#gaborSizeDVA = (real_hori_pix, real_vert_pix)
+gaborSizeDVA = real_hori_pix #only using hori or vert works as the target is a circle
+
 # Fixation dot
 ##############
 fix = np.ones((20, 20))*(-1)
